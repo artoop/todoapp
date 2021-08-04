@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 
 const Form = ({ setInputText, todos, setTodos, inputText, setStatus }) => {
+    const [isError, setIsError] = useState(false);
+
     const inputTextHandler = (e) => {
-        console.log(e.target.value);
         setInputText(e.target.value);
     };
-    
+
     const submitTodoHandler = (e) => {
         e.preventDefault();
+
+        if (inputText === '') {
+            setIsError(true);
+            return;
+        }
+        setIsError(false);
+
         setTodos([
             ...todos,
-             { text: inputText, completed: false, id: Math.random() * 1000 }
+            { text: inputText, completed: false, id: Math.random() * 1000 }
         ]);
         setInputText("");
     };
@@ -22,11 +30,11 @@ const Form = ({ setInputText, todos, setTodos, inputText, setStatus }) => {
 
     return (
         <form>
-            <input 
-            value={inputText} 
-            onChange={inputTextHandler} 
-            type="text" 
-            className="todo-input" 
+            <input
+                value={inputText}
+                onChange={inputTextHandler}
+                type="text"
+                className="todo-input"
             />
             <button onClick={submitTodoHandler} className="todo-button" type="submit">
                 <i className="fas fa-plus-square"></i>
@@ -38,6 +46,9 @@ const Form = ({ setInputText, todos, setTodos, inputText, setStatus }) => {
                     <option value="uncompleted">Nao Feitas</option>
                 </select>
             </div>
+            {isError && (
+                <p>Preencha o campo</p>
+            )}
         </form>
     );
 };

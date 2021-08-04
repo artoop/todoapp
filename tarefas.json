@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "text": "Projeto WS",
+    "completed": false,
+    "author": "Joao"
+  },
+  {
+    "id": 2,
+    "text": "Prestação de Contas",
+    "completed": false,
+    "author": "Maria"
+  },
+  {
+    "id": 3,
+    "text": "Planilha Financeira",
+    "completed": false,
+    "author": "Carlos"
+  }
+]

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import './App.css';
 
 import Form from './components/Form';
@@ -11,12 +11,11 @@ function App() {
   const [filteredTodos, setFilteredTodos] = useState([]);
 
   useEffect(() => {
-    filterHandler( );
+    filterHandler();
   }, [todos, status]);
 
-  //functions
   const filterHandler = () => {
-    switch(status){
+    switch (status) {
       case 'completed':
         setFilteredTodos(todos.filter(todo => todo.completed === true));
         break;
@@ -29,22 +28,41 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/tarefas.json', {
+        method: 'GET',
+      });
+      const tasks = await response.json();
+
+      setTodos(tasks);
+    } catch (error) {
+      console.log('Erro de conexão', error);
+    }
+  }
+
   return (
     <div className="App">
       <header>
         <h1>Minhas Tarefas</h1>
       </header>
-      < Form 
-        inputText={inputText} 
-        todos={todos} 
-        setTodos={setTodos} 
+
+      <Form
+        inputText={inputText}
+        todos={todos}
+        setTodos={setTodos}
         setInputText={setInputText}
         setStatus={setStatus}
       />
-      <TodoList 
-        filteredTodos={filteredTodos} 
-        setTodos={setTodos} 
-        todos={todos}/>
+      <TodoList
+        filteredTodos={filteredTodos}
+        setTodos={setTodos}
+        todos={todos}
+      />
     </div>
   );
 }
