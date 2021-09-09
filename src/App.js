@@ -7,12 +7,22 @@ import TodoList from "./components/TodoList";
 function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
 
   useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  useEffect(() => {
     filterHandler();
   }, [todos, status]);
+
+  useEffect(() => {
+    if (loading) return;
+    registerTasks();
+  }, [todos]);
 
   const filterHandler = () => {
     switch (status) {
@@ -28,9 +38,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   const fetchTasks = async () => {
     try {
@@ -40,6 +47,18 @@ function App() {
       const tasks = await response.json();
 
       setTodos(tasks);
+      setLoading(false);
+    } catch (error) {
+      console.log('Erro de conexão', error);
+    }
+  }
+
+  const registerTasks = async () => {
+    try {
+      await fetch('http://localhost:8081/tarefas.json', {
+        method: 'POST',
+        body: JSON.stringify(todos),
+      });
     } catch (error) {
       console.log('Erro de conexão', error);
     }
